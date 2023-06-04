@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "368551242209",
+    "project_id": "smartvet-19c4a",
+    "storage_bucket": "smartvet-19c4a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:368551242209:android:44c204bdcddb5d0b320aa0",
+        "android_client_info": {
+          "package_name": "com.smartvet"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "368551242209-0htnnpkb61157n7otkoffas72b6tivqv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD5Tm7mc0oKxSCdaScUmop0mGWcLHG766c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "368551242209-0htnnpkb61157n7otkoffas72b6tivqv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
