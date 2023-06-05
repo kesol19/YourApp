@@ -9,7 +9,7 @@ export default function ProfileContainer({ navigation }) {
       headerRight: () => (
         <TouchableOpacity
           activeOpacity={0.8}
-          onPress={() => navigation.navigate('alarm')}>
+          onPress={() => navigation.navigate('cart')}>
           <Image
             style={{width: 20, height: 25, marginRight: 20}}
             source={require('../asset/alarm.png')}

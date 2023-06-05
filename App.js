@@ -15,8 +15,8 @@ import Join from './screen/JoinContainer';
 import Home from './screen/HomeContainer';
 import Category from './screen/CategoryContainer';
 import Profile from './screen/ProfileContainer';
-import Alarm from './screen/AlarmContainer';
-import Report from './screen/ReportContainer';
+import Cart from './screen/CartContainer';
+import Cart_info from './screen/Cart_infoContainer';
 import Category_one from './screen/Category_oneContainer';
 import Category_two from './screen/Category_twoContainer';
 import Account from './screen/AccountContainer';
@@ -28,7 +28,7 @@ const Tab = createBottomTabNavigator();
 
 var month=new Date().getMonth();
 var year=new Date().getFullYear();
-const reportTitle=year+"년"+" "+month+"월 활동 보고서";
+const reportTitle="상품 상세";
 
 function LogJoin_navi(){
   return(
@@ -98,7 +98,7 @@ function Category_navi({navigation}){
       <Stack.Screen name="category_one" component={Category_one} options={{
           title: ' ',
           headerRight: () => (
-            <TouchableOpacity activeOpacity={0.4} onPress={() => navigation.navigate('alarm')}>
+            <TouchableOpacity activeOpacity={0.4} onPress={() => navigation.navigate('cart')}>
               <Image
                style={{width: 20, height: 25, marginRight: 20}}
                source={require('./asset/alarm.png')}
@@ -108,7 +108,7 @@ function Category_navi({navigation}){
       <Stack.Screen name="category_two" component={Category_two} options={{
           title: ' ',
           headerRight: () => (
-            <TouchableOpacity activeOpacity={0.4} onPress={() => navigation.navigate('alarm')}>
+            <TouchableOpacity activeOpacity={0.4} onPress={() => navigation.navigate('cart')}>
               <Image
                style={{width: 20, height: 25, marginRight: 20}}
                source={require('./asset/alarm.png')}
@@ -124,7 +124,7 @@ function Product_navi({navigation}){
     <Stack.Navigator>
       <Stack.Screen name="product_list" component={Product_list} options={{title: '나의 주문내역'}} />
       <Stack.Screen name="product_info" component={Product_info} options={{
-          title: ' ',
+          title: '주문 상세', headerTitleAlign: 'center',
           headerRight: () => (
             <TouchableOpacity activeOpacity={0.4} onPress={() => navigation.navigate('product_list')}>
               <Text style={{color:'rgba(28, 173, 236, 1)', fontWeight:'bold',fontSize: 22,}}>완료</Text>
@@ -141,8 +141,8 @@ export default function App(){
         <Stack.Screen name="loading" component={Loading} options={{headerShown:false}}/>
         <Stack.Screen name="logjoin_navi" component={LogJoin_navi} options={{headerShown:false}} />
         <Stack.Screen name="tab_navi" component={Tab_navi} options={{headerShown:false}}/>
-        <Stack.Screen name="alarm" component={Alarm} options={{title:'장바구니', headerTitleStyle: {fontWeight: 'bold', fontSize: 22,}, headerTitleAlign: 'center'}}/>
-        <Stack.Screen name="report" component={Report} options={{title:reportTitle, headerTitleStyle: {fontWeight: 'bold', fontSize: 22,}, headerTitleAlign: 'center'}}/>
+        <Stack.Screen name="cart" component={Cart} options={{title:'장바구니', headerTitleStyle: {fontWeight: 'bold', fontSize: 22,}, headerTitleAlign: 'center'}}/>
+        <Stack.Screen name="cart_info" component={Cart_info} options={{title:reportTitle, headerTitleStyle: {fontWeight: 'bold', fontSize: 22,}, headerTitleAlign: 'center'}}/>
         <Stack.Screen name="category_navi" component={Category_navi} options={{headerShown:false}} />
         <Stack.Screen name="account" component={Account} options={{ title: ' ',}}/>
         <Stack.Screen name="product_navi" component={Product_navi} options={{headerShown:false}}/>

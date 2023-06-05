@@ -1,170 +1,155 @@
 import React, {useState, useEffect } from 'react';
 import { View, Text ,Button,StyleSheet,TouchableOpacity,Image,TextInput,FlatList,PermissionsAndroid } from 'react-native';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import Modal from "react-native-modal";
 import Axios from 'axios'; //추가
 
+const Products = [
+    {
+      id: "1234",
+      name:"주전자",
+      price: 1000,
+      src:"https://shopping-phinf.pstatic.net/main_6229849/6229849107.12.jpg?type=f300",
+      date: '2023. 05. 29',
+    },
+    {
+      id: "1235",
+      name: "멀티탭",
+      price: 2000,
+      src:"http://www.promademall.co.kr/shop/data/goods/1648095471371l0.jpg",
+      date: '2023. 06. 01',
+    },
+    {
+      id: "1236",
+      name: "후라이팬",
+      price: 3000,
+      src:"https://simage.mujikorea.net/goods/31/13/93/19/4550182577082_N_N_400.jpg",
+      date: '2023. 06. 04',
+    },
+    {
+      id: "1237",
+      name: "전자시계",
+      price: 4000,
+      src:"https://simage.mujikorea.net/goods/31/04/60/43/4547315831999_N_N_400.jpg",
+      date: '2023. 06. 06',
+    },
+  ];
+
+const Product_infoContainer = ({ route }) => {
+  const [product, setProduct] = useState(null);
+  const { productId, category } = route.params;
 /*
-const renderGoods = ({ item }) => {
+  useEffect(() => {
+    // 외부 API에서 상품 상세 데이터를 가져오는 비동기 함수 호출
+    fetchProductDetail();
+  }, []);
+
+  const fetchProductDetail = async () => {
+    try {
+      // 외부 API 호출 및 상품 상세 데이터 받아오기
+      const response = await fetch(`http://54.180.134.13:8080/api/item/${productId}`);
+      const data = await response.json();
+      setProduct(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  if (!product) {
+    return (
+      <View style={styles.container}>
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
+
   return (
-    <View>
-      <View>
-        <Text>id: {item.id}</Text>
-      </View>
-      <View>
-        <Text>name: {item.name}</Text>
-      </View>
-      <View>
-        <Text>price: {item.price}</Text>
-      </View>
-      <View>
-        <Text>image: {item.image}</Text>
-      </View>
+    <View style={styles.container}>
+      <Text style={styles.productName}>{product.name}</Text>
+      <Text style={styles.productPrice}>{product.price}</Text>
     </View>
   );
 };
 
-export default function Product_infoContainer(){
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 16,
+    backgroundColor: '#fff',
+  },
+  productName: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  productPrice: {
+    fontSize: 16,
+    marginTop: 4,
+  },
+});
+*/
+  const getProductName = (productId) => {
+    const product = Products.find((item) => item.id === productId);
+    return product ? product.name : '상세 정보 없음';
+  };
 
-    //추가
-    const [Good, setGoods] = useState([]);
+  const getProductPrice = (productId) => {
+    const product = Products.find((item) => item.id === productId);
+    return product ? product.price : '상세 정보 없음';
+  };
 
+  const getProductImg = (productId) => {
+    const product = Products.find((item) => item.id === productId);
+    return product ? product.src : '상세 정보 없음';
+  };
 
-    //추가
+  const getProductDate = (productId) => {
+    const product = Products.find((item) => item.id === productId);
+    return product ? product.date : '상세 정보 없음';
+  };
 
-    const getGoods = () => {
-     Axios.get('http://54.180.134.13:8080/item')
-      .then(res => {
-        setGoods(res.data);
-      })
-      .catch(error => console.log(error));
-    };
+  return (
+    <View style={pa_styles.container}>
 
-    useEffect(() => {
-        getGoods();
-    }, []);
-
-
-
-    return(
-        <View style={pa_styles.container}>
-            
-            <View style={pa_styles.photo}>
-              <Image source={{uri: avatar}} style={{width:"95%",height:"100%",borderRadius:100}}/>
-            </View>
-            <View style={pa_styles.info}>
-                <View style={in_styles.button}>
-                    <View style={in_styles.block_l}>
-                        <Text style={in_styles.text_l}>     이름</Text>
-                    </View>
-                    <View style={in_styles.block_m}>
-                        <TextInput style={in_styles.text_m}
-                            onChangeText={onChangeInput_name}
-                            value={name}
-                            placeholder="입력"/>
-                    </View>
-                    <View style={in_styles.block_r}>
-                        <Text style={in_styles.text_r}>{'  >      '}</Text>
-                    </View>
-                </View>
-                <View style={in_styles.button}>
-                    <View style={in_styles.block_l}>
-                        <Text style={in_styles.text_l}>     생년월일</Text>
-                    </View>
-                    <View style={in_styles.block_m}>
-                        <TextInput style={in_styles.text_m}
-                            onChangeText={onChangeInput_birth}
-                            value={birth}
-                            keyboardType="number-pad"
-                            placeholder="입력"/>
-                    </View>
-                    <View style={in_styles.block_r}>
-                        <Text style={in_styles.text_r}>{'  >      '}</Text>
-                    </View>
-                </View>
-                <View style={in_styles.button}>
-                    <View style={in_styles.block_l}>
-                        <Text style={in_styles.text_l}>     품종</Text>
-                    </View>
-                    <TouchableOpacity style={in_styles.block_m}>
-                        <Modal_code 
-                          code={code}
-                          onChangeInput_code={onChangeInput_code}/>
-                    </TouchableOpacity>
-                    <View style={in_styles.block_r}>
-                        <Text style={in_styles.text_r}>{'  >      '}</Text>
-                    </View>
-                </View>
-                <View style={in_styles.button}>
-                    <View style={in_styles.block_l}>
-                        <Text style={in_styles.text_l}>     성별</Text>
-                    </View>
-                    <TouchableOpacity style={in_styles.block_m}>
-                        <Modal_zender 
-                          zender={zender}
-                          onChangeInput_zender={onChangeInput_zender}/>
-                    </TouchableOpacity>
-                    <View style={in_styles.block_r}>
-                        <Text style={in_styles.text_r}>{'  >      '}</Text>
-                    </View>
-                </View>
-                <View style={in_styles.button}>
-                    <View style={in_styles.block_l}>
-                        <Text style={in_styles.text_l}>     사이즈</Text>
-                    </View>
-                    <TouchableOpacity style={in_styles.block_m}>
-                        <Modal_size 
-                          size={size}
-                          onChangeInput_size={onChangeInput_size}/>
-                    </TouchableOpacity>
-                    <View style={in_styles.block_r}>
-                        <Text style={in_styles.text_r}>{'  >      '}</Text>
-                    </View>
-                </View>
-                <View style={in_styles.button}>
-                    <View style={in_styles.block_l}>
-                        <Text style={in_styles.text_l}>     무게</Text>
-                    </View>
-                    <View style={in_styles.block_m}>
-                        <TextInput style={in_styles.text_m}
-                            onChangeText={onChangeInput_weight}
-                            value={weight}
-                            keyboardType="number-pad"
-                            placeholder=""/>
-                    </View>
-                    <View style={in_styles.block_m}>
-                        <Text style={in_styles.text_m}>kg</Text>
-                    </View>
-                    <View style={in_styles.block_r}>
-                        <Text style={in_styles.text_r}>{'  >      '}</Text>
-                    </View>
-                </View>
-                <View style={in_styles.button}>
-                    <View style={in_styles.block_l}>
-                        <Text style={in_styles.text_l}>     활동수준</Text>
-                    </View>
-                    <TouchableOpacity style={in_styles.block_m}>
-                        <Modal_active 
-                          active={active}
-                          onChangeInput_active={onChangeInput_active}/>
-                    </TouchableOpacity>
-                    <View style={in_styles.block_r}>
-                        <Text style={in_styles.text_r}>{'  >      '}</Text>
-                    </View>
-                </View>
-            </View>
-
-            <FlatList
-              style={m_style.list}
-              contentContainerStyle={{paddingBottom: 50}}
-              data={item}
-              renderItem={renderItem}
-              keyExtractor={item => item.id}
-            />
+       <View style={pa_styles.photo}>
+         <Image source={{uri: getProductImg(productId)}} style={{width:"95%",height:"100%",borderRadius:100}}/>
+       </View>
+       <View style={pa_styles.info}>
+        <View style={in_styles.button}>
+          <View style={in_styles.block_l}>
+            <Text style={in_styles.text_l}>{getProductName(productId)}</Text>
+          </View>
         </View>
-    );
-}
+        <View style={in_styles.button}>
+          <View style={in_styles.block_l}>
+            <Text style={in_styles.text_l}>결제금액</Text>
+            <Text style={in_styles.text_m}>{getProductPrice(productId)}원</Text>
+          </View>
+        </View>
+        <View style={in_styles.button}>
+          <View style={in_styles.block_l}>
+            <Text style={in_styles.text_l}>주문일</Text>
+            <Text style={in_styles.text_m}>{getProductDate(productId)}</Text>
+          </View>
+        </View>
+       </View>
+    </View>
+  );
+};
 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 16,
+    backgroundColor: '#fff',
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 16,
+  },
+  detail: {
+    fontSize: 16,
+  },
+});
 
 const pa_styles=StyleSheet.create({
     container:{
@@ -173,7 +158,7 @@ const pa_styles=StyleSheet.create({
     },
     photo:{
         width:"100%",
-        height:"30%",
+        height:"50%",
         backgroundColor: '#ffffff',
         alignItems: 'center',
     },
@@ -197,8 +182,8 @@ const ph_styles =StyleSheet.create({
       resizeMode:'contain'
     },
     icon:{
-        position: 'absolute',                                                                                                                                                                                
-        left: 220,                                                                                                                                                                                                    
+        position: 'absolute',
+        left: 220,
         top: 130,
     }
   });
@@ -211,7 +196,7 @@ const ph_styles =StyleSheet.create({
       alignItems: "center",
       backgroundColor: "#ffffff",
       //padding: 15,
-    }, 
+    },
     block_l:{
         flex:1,
         backgroundColor: '#ffffff',
@@ -223,9 +208,10 @@ const ph_styles =StyleSheet.create({
         backgroundColor: '#ffffff',
     },
     text_l:{
-        fontSize: 20,
+        fontSize: 25,
         color: '#000000',
         alignItems: 'center',
+        fontWeight: "bold",
     },
     text_m:{
         fontSize: 19,
@@ -275,59 +261,6 @@ const ph_styles =StyleSheet.create({
     list: {
       height: '80%',
     }
-  })
-  */
+  });
 
-const Product_infoContainer = ({ route }) => {
-  const [product, setProduct] = useState(null);
-  const { productId } = route.params;
-
-  useEffect(() => {
-    // 외부 API에서 상품 상세 데이터를 가져오는 비동기 함수 호출
-    fetchProductDetail();
-  }, []);
-
-  const fetchProductDetail = async () => {
-    try {
-      // 외부 API 호출 및 상품 상세 데이터 받아오기
-      const response = await fetch(`http://54.180.134.13:8080/api/item/${productId}`);
-      const data = await response.json();
-      setProduct(data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  if (!product) {
-    return (
-      <View style={styles.container}>
-        <Text>Loading...</Text>
-      </View>
-    );
-  }
-
-  return (
-    <View style={styles.container}>
-      <Text style={styles.productName}>{product.name}</Text>
-      <Text style={styles.productPrice}>{product.price}</Text>
-    </View>
-  );
-};
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 16,
-    backgroundColor: '#fff',
-  },
-  productName: {
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  productPrice: {
-    fontSize: 16,
-    marginTop: 4,
-  },
-});
-
-  export default Product_infoContainer;
+export default Product_infoContainer;

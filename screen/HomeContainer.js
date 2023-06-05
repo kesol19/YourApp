@@ -25,7 +25,7 @@ export default function HomeContainer({navigation}) {
       headerRight: () => (
         <TouchableOpacity
           activeOpacity={0.8}
-          onPress={() => navigation.navigate('alarm')}>
+          onPress={() => navigation.navigate('cart')}>
           <Image
             style={{width: 20, height: 25, marginRight: 20}}
             source={require('../asset/alarm.png')}
@@ -40,18 +40,18 @@ export default function HomeContainer({navigation}) {
      <View style={home_styles.container}>
        <ScrollView
          contentContainerStyle={home_styles.scrollView}
-         horizontal={true}
-         pagingEnabled={true}>
+         pagingEnabled={true}
+         vertical={true}>
 
-         <View style={home_styles.product_box}>
-          <Text style={home_styles.header_one}>{year}년 {month}월 추천 상품</Text>
-         </View>
-         <View style={home_styles.product_box}>
-
-         </View>
-         <View style={home_styles.product_box}>
-
-         </View>
+         <ScrollView style={home_styles.product_box} horizontal={true}>
+          <Text style={home_styles.header_one}>{year}년 {month+1}월 추천 상품</Text>
+         </ScrollView>
+         <ScrollView style={home_styles.product_box} horizontal={true}>
+          <Text style={home_styles.header_one}>오늘의 이벤트</Text>
+         </ScrollView>
+         <ScrollView style={home_styles.product_box} horizontal={true}>
+          <Text style={home_styles.header_one}>#주방용품</Text>
+         </ScrollView>
        </ScrollView>
      </View>
   );
@@ -84,9 +84,9 @@ const home_styles = StyleSheet.create({
     alignItems: 'center',
   },*/
   product_box: {
-    width: 200,
+    width: 400,
     height: 200,
-    backgroundColor: 'lightblue',
+    backgroundColor: 'lightgray',
     marginBottom: 10,
   },
   header_one: {
@@ -95,6 +95,6 @@ const home_styles = StyleSheet.create({
     paddingBottom: 5,
     marginTop: 10,
     textAlign: 'center',
-    color: 'black',
+    color: '#00BFFF',
   },
 });
