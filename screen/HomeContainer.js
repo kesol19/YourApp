@@ -11,6 +11,7 @@ import {
 import {color} from 'react-native-elements/dist/helpers';
 import {useState} from 'react';
 import ProgressCircle from 'react-native-progress-circle';
+import Carousel from 'react-native-snap-carousel';
 
 var month=new Date().getMonth();
 var year=new Date().getFullYear();
@@ -35,7 +36,7 @@ export default function HomeContainer({navigation}) {
     });
   });
 
-
+//캐로셀 추가 가능
   return (
      <View style={home_styles.container}>
        <ScrollView

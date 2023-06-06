@@ -1,7 +1,119 @@
-import React from 'react';
-import { View, Text ,Button} from 'react-native';
+import React, {useState, useEffect } from 'react';
+import { ScrollView, View, Text, Button, TouchableOpacity, StyleSheet, Image, Dimensions, FlatList,StatusBar } from 'react-native';
 import { NavigationContainer } from "@react-navigation/native";
 
+const Category_twoContainer = ({navigation}) => {
+  const products = [
+    {
+      id: "1234",
+      name:"주전자",
+      price: 1000,
+      src:"https://shopping-phinf.pstatic.net/main_6229849/6229849107.12.jpg?type=f300",
+    },
+    {
+      id: "1236",
+      name: "후라이팬",
+      price: 3000,
+      src:"https://simage.mujikorea.net/goods/31/13/93/19/4550182577082_N_N_400.jpg",
+    },
+    {
+      id: "1242",
+      name: "국자",
+      price: 1000,
+      src:"https://simage.mujikorea.net/goods/31/14/31/43/4550344594933_N_N_400.jpg",
+    },
+    {
+      id: "1243",
+      name: "가위",
+      price: 5000,
+      src:"https://simage.mujikorea.net/goods/31/13/18/47/4547315822225_N_N_400.jpg",
+    },
+    {
+      id: "1244",
+      name: "앞치마",
+      price: 2000,
+      src:"https://simage.mujikorea.net/goods/31/08/75/52/4549738968863_N_N_400.jpg",
+    },
+    {
+      id: "1245",
+      name: "계량컵",
+      price: 4000,
+      src:"https://simage.mujikorea.net/goods/31/10/37/34/4547315129706_N_N_400.jpg",
+    },
+    {
+      id: "1246",
+      name: "양수냄비 3L",
+      price: 30000,
+      src:"https://simage.mujikorea.net/goods/31/14/01/49/4550182219944_N_N_400.jpg",
+    },
+  ];
+
+  const handleProductSelection = (productId) => {
+    const selectedProduct = products.find((product) => product.id === productId);
+    console.log(selectedProduct); // 해당 상품 정보를 콘솔에 출력
+    navigation.navigate('category_detail', { productId });
+  };
+
+  const renderProductItem = ({ item }) => {
+    return (
+      <TouchableOpacity
+      style={styles.itemContainer}
+      onPress={() => handleProductSelection(item.id)}
+      >
+        <Image source={{uri: item.src}} style={styles.itemImage} />
+        <Text style={styles.itemName}>{item.name}</Text>
+        <Text style={styles.itemPrice}>{item.price} 원</Text>
+      </TouchableOpacity>
+    );
+  };
+
+  return (
+    <View style={styles.container}>
+      <FlatList
+        data={products}
+        renderItem={renderProductItem}
+        keyExtractor={(item) => item.id.toString()}
+        numColumns={2}
+        columnWrapperStyle={styles.columnWrapper}
+      />
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 16,
+    backgroundColor: '#fff',
+  },
+  columnWrapper: {
+    justifyContent: 'space-between',
+  },
+  itemContainer: {
+    flex: 1,
+    margin: 8,
+    padding: 16,
+    backgroundColor: '#f2f2f2',
+    borderRadius: 8,
+  },
+  itemName: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginTop: 6,
+  },
+  itemPrice: {
+    fontSize: 14,
+    marginTop: 8,
+  },
+  itemImage: {
+    width: 130,
+    height: 130,
+    borderRadius: 8,
+  },
+});
+
+export default Category_twoContainer;
+/*
 export default function Category_twoContainer(){
     return(
         <View>
@@ -9,7 +121,7 @@ export default function Category_twoContainer(){
         </View>
     );
 }
-
+*/
 /*
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';

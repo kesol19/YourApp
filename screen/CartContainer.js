@@ -11,6 +11,18 @@ let screenHeight=Dimensions.get('window').height;
 
 const cartItems = [
     {
+      id: "1232",
+      name:"독서대",
+      price: 1000,
+      src:"https://cdn-std-web-146-149.cdn-nhncommerce.com/eastnine_godomall_com/data/goods/17/05/22/1000000136/1000000136_detail_055.jpg",
+    },
+    {
+      id: "1233",
+      name:"블라인드",
+      price: 10000,
+      src:"https://www.costco.co.kr/medias/sys_master/images/haa/h4a/79174940885022.webp",
+    },
+    {
       id: "1234",
       name:"주전자",
       price: 1000,
@@ -130,7 +142,7 @@ const styles = StyleSheet.create({
   },
   deleteButton: {
     padding: 8,
-    backgroundColor: '#FF0000',
+    backgroundColor: '#00BFFF',
     borderRadius: 8,
   },
   deleteButtonText: {

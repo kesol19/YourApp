@@ -19,6 +19,7 @@ import Cart from './screen/CartContainer';
 import Cart_info from './screen/Cart_infoContainer';
 import Category_one from './screen/Category_oneContainer';
 import Category_two from './screen/Category_twoContainer';
+import Category_detail from './screen/Category_detailContainer';
 import Account from './screen/AccountContainer';
 import Product_list from './screen/Product_listContainer';
 import Product_info from './screen/Product_infoContainer';
@@ -91,12 +92,12 @@ function Tab_navi(){
     </Tab.Navigator>
   );
 }
-
+//화면 title은 카테고리 임의로 설정한 2개로 함.
 function Category_navi({navigation}){
   return(
     <Stack.Navigator>
       <Stack.Screen name="category_one" component={Category_one} options={{
-          title: ' ',
+          title: '생활용품',
           headerRight: () => (
             <TouchableOpacity activeOpacity={0.4} onPress={() => navigation.navigate('cart')}>
               <Image
@@ -106,7 +107,7 @@ function Category_navi({navigation}){
             </TouchableOpacity>
           ),}} />
       <Stack.Screen name="category_two" component={Category_two} options={{
-          title: ' ',
+          title: '주방용품',
           headerRight: () => (
             <TouchableOpacity activeOpacity={0.4} onPress={() => navigation.navigate('cart')}>
               <Image
@@ -115,6 +116,7 @@ function Category_navi({navigation}){
               />
             </TouchableOpacity>
           ),}}/>
+      <Stack.Screen name="category_detail" component={Category_detail} options={{title: '상품 상세'}} />
     </Stack.Navigator>
   );
 }

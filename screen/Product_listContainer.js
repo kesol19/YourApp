@@ -110,6 +110,8 @@ const styles = StyleSheet.create({
   },
 });
 */
+
+
 export default function Product_listContainer({navigation}){
 
   const handleProductSelection = (productId) => {
@@ -131,7 +133,11 @@ export default function Product_listContainer({navigation}){
           <Text style={styles.productName}>{item.name}</Text>
           <Text style={styles.productPrice}>₩{item.price}</Text>
         </View>
-        <Text style={styles.orderDate}>{item.date}</Text>
+        <View style={styles.productDetails}>
+          <Text style={styles.orderDate}>{item.date}</Text>
+          <Text style={styles.orderDate}>배송완료</Text>
+          <Text style={styles.orderDetail}>> 주문상세</Text>
+        </View>
       </View>
      </TouchableOpacity>
     );
@@ -188,69 +194,12 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#777777',
   },
+  orderDetail: {
+    fontSize: 12,
+    color: '#00BFFF',
+    marginTop: 15,
+  },
 });
-
-/*
-export default function Product_listContainer({navigation}){
-const renderProduct = ({ item }) => {
-    return(
-        <TouchableOpacity activeOpacity={0.8} style={styles.block} 
-            onPress={() => navigation.navigate('product_info')}>
-            <View style={styles.block_l}>
-                <Image source={{uri:item.src}} style={{height:'100%',width:'100%',resizeMode:'contain'}}/>
-            </View>
-            <View style={styles.block_r}>
-                <Text style={{fontSize:22, padding:23, fontWeight:'bold'}}>{item.name}</Text>
-            </View>
-        </TouchableOpacity>
-    );
-}
-
-    return(
-        <View style={styles.container}>
-            <View style={styles.list}>
-                <FlatList
-                    data={Product}
-                    renderItem={renderProduct}
-                    keyExtractor={(name) => name.id}
-                />
-            </View>
-        </View>
-    );
-}
-
-const styles = StyleSheet.create({
-    container:{
-        flex:1,
-        backgroundColor:'#FFFFFF',
-    },
-    list:{
-        width:"100%",
-        height:"100%",
-        backgroundColor: '#ffffff',
-        paddingHorizontal:30,
-        padding:10,
-    },
-    block:{
-        flex:1,
-        flexDirection: 'row',
-        alignItems: "center",
-        backgroundColor:'#FFFFFF',
-        padding:10,
-        borderBottomWidth:1,
-        borderColor:"#A6A6A6",
-    },
-    block_l:{
-        width:"20%",
-        height:"100%",
-        backgroundColor:"#FFFFFF",
-    },
-    block_r:{
-        flex:1,
-        backgroundColor:"#FFFFFF",
-    },
-});
-*/
 
 /*
 const Product_listContainer = ({ navigation }) => {
@@ -259,8 +208,15 @@ const Product_listContainer = ({ navigation }) => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get('http://54.180.134.13:8080/api/item');
+        const response = await axios.get('http://54.180.134.13:8080/api/item', {
+           headers: {
+               //'Content-Type': 'application/json',
+               itemId: '1234',
+           },
+        });
         setProducts(response.data);
+
+        console.log(response.data);
       } catch (error) {
         console.error(error);
       }

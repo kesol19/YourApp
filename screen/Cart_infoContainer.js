@@ -1,10 +1,22 @@
 import React, {useState, useEffect } from 'react';
-import { View, Text ,Button,StyleSheet,TouchableOpacity,Image,TextInput,FlatList,PermissionsAndroid } from 'react-native';
+import { ScrollView, View, Text ,Button,StyleSheet,TouchableOpacity,Image,TextInput,FlatList,PermissionsAndroid } from 'react-native';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import Modal from "react-native-modal";
 import Axios from 'axios'; //추가
 
 const Products = [
+    {
+      id: "1232",
+      name:"독서대",
+      price: 1000,
+      src:"https://cdn-std-web-146-149.cdn-nhncommerce.com/eastnine_godomall_com/data/goods/17/05/22/1000000136/1000000136_detail_055.jpg",
+    },
+    {
+      id: "1233",
+      name:"블라인드",
+      price: 10000,
+      src:"https://www.costco.co.kr/medias/sys_master/images/haa/h4a/79174940885022.webp",
+    },
     {
       id: "1234",
       name:"주전자",
@@ -31,6 +43,11 @@ const Products = [
     },
   ];
 
+  var month=new Date().getMonth()+1;
+  var todayDate=new Date().getDate();
+  const week=['일', '월', '화', '수', '목', '금', '토'];
+  let dayOfWeek=week[new Date().getDay()+3];
+
 const Cart_infoContainer = ({ route }) => {
   const [product, setProduct] = useState(null);
   const { productId, category } = route.params;
@@ -51,7 +68,9 @@ const Cart_infoContainer = ({ route }) => {
   };
 
   return (
-      <View style={pa_styles.container}>
+      <ScrollView contentContainerStyle={pa_styles.container}
+      pagingEnabled={true}
+      vertical={true}>
 
          <View style={pa_styles.photo}>
            <Image source={{uri: getProductImg(productId)}} style={{width:"95%",height:"100%",borderRadius:100}}/>
@@ -62,14 +81,28 @@ const Cart_infoContainer = ({ route }) => {
               <Text style={in_styles.text_l}>{getProductName(productId)}</Text>
             </View>
           </View>
-          <View style={in_styles.button}>
+          <View style={in_styles.button_p}>
             <View style={in_styles.block_l}>
-              <Text style={in_styles.text_l}>{getProductPrice(productId)}원</Text>
+              <Text style={in_styles.text_l}>{getProductPrice(productId)} 원</Text>
             </View>
           </View>
-
+          <View style={in_styles.button_p}>
+             <View style={in_styles.block_l}>
+               <Text style={in_styles.text_g}>{dayOfWeek}요일 {month}/{todayDate+3} 전 도착 예정</Text>
+             </View>
+          </View>
+          <View style={in_styles.button_p}>
+             <View style={in_styles.block_l}>
+               <Text style={in_styles.text_g}>당일출고 (평일 오후 2시 전 주문 시)</Text>
+             </View>
+          </View>
+          <View style={in_styles.button_p}>
+             <View style={in_styles.block_l}>
+               <Text style={in_styles.text_g}>무료배송</Text>
+             </View>
+          </View>
          </View>
-      </View>
+      </ScrollView>
     );
  };
 
@@ -112,10 +145,20 @@ const Cart_infoContainer = ({ route }) => {
  const in_styles=StyleSheet.create({
    button: {
      width:"100%",
-     height:"13%",
+     height:"15%",
      flexDirection: 'row',
      alignItems: "center",
      backgroundColor: "#ffffff",
+     marginLeft: 40,
+     marginTop: 10,
+   },
+   button_p: {
+     width:"100%",
+     height:"8%",
+     flexDirection: 'row',
+     alignItems: "center",
+     backgroundColor: "#ffffff",
+     marginLeft: 40,
    },
    block_l:{
      flex:1,
@@ -141,6 +184,11 @@ const Cart_infoContainer = ({ route }) => {
      fontSize: 20,
      color: '#A6A6A6',
      fontWeight: "bold",
+   },
+   text_g:{
+     fontSize: 20,
+     color: '#000000',
+     alignItems: 'center',
    },
  });
 

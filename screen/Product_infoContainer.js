@@ -1,6 +1,8 @@
 import React, {useState, useEffect } from 'react';
 import { View, Text ,Button,StyleSheet,TouchableOpacity,Image,TextInput,FlatList,PermissionsAndroid } from 'react-native';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 import Axios from 'axios'; //추가
 
 const Products = [
@@ -37,6 +39,16 @@ const Products = [
 const Product_infoContainer = ({ route }) => {
   const [product, setProduct] = useState(null);
   const { productId, category } = route.params;
+
+  const [userData, setUserData] = useState([]);
+
+  const userDocument = firestore().collection('users').doc(auth().currentUser.uid).get();
+
+  useEffect(() => {
+    userDocument.then(documentSnapshot => {
+      setUserData(documentSnapshot.data());
+    });
+  }, [userData]);
 /*
   useEffect(() => {
     // 외부 API에서 상품 상세 데이터를 가져오는 비동기 함수 호출
@@ -107,30 +119,35 @@ const styles = StyleSheet.create({
   };
 
   return (
-    <View style={pa_styles.container}>
-
-       <View style={pa_styles.photo}>
-         <Image source={{uri: getProductImg(productId)}} style={{width:"95%",height:"100%",borderRadius:100}}/>
-       </View>
-       <View style={pa_styles.info}>
-        <View style={in_styles.button}>
-          <View style={in_styles.block_l}>
-            <Text style={in_styles.text_l}>{getProductName(productId)}</Text>
-          </View>
+    <View style={styles.container}>
+      <Text style={styles.title}>{getProductDate(productId)} 주문</Text>
+      <View style={styles.orderInfo}>
+        <Text style={styles.title}>주문자</Text>
+        <Text style={styles.title}>{userData.name}</Text>
+      </View>
+      <Text style={styles.itemsTitle}>주문상품</Text>
+        <View style={styles.itemContainer}>
+          <Text style={styles.itemName}>{getProductName(productId)}</Text>
+          <Text style={styles.itemPrice}>{getProductPrice(productId)} 원</Text>
         </View>
-        <View style={in_styles.button}>
-          <View style={in_styles.block_l}>
-            <Text style={in_styles.text_l}>결제금액</Text>
-            <Text style={in_styles.text_m}>{getProductPrice(productId)}원</Text>
-          </View>
+      <Text style={styles.itemsTitle}>결제 정보</Text>
+        <View style={styles.itemContainer}>
+          <Text style={styles.itemName}>상품 가격</Text>
+          <Text style={styles.itemPrice}>{getProductPrice(productId)} 원</Text>
         </View>
-        <View style={in_styles.button}>
-          <View style={in_styles.block_l}>
-            <Text style={in_styles.text_l}>주문일</Text>
-            <Text style={in_styles.text_m}>{getProductDate(productId)}</Text>
-          </View>
+        <View style={styles.itemContainer}>
+          <Text style={styles.itemName}>할인금액</Text>
+          <Text style={styles.itemPrice}>0 원</Text>
         </View>
-       </View>
+        <View style={styles.itemContainer}>
+          <Text style={styles.itemName}>배송비</Text>
+          <Text style={styles.itemPrice}>0 원</Text>
+        </View>
+      <View style={styles.line} />
+      <View style={styles.itemContainer}>
+        <Text style={styles.itemsTitle}>총 결제금액</Text>
+        <Text style={styles.itemsTitle}>{getProductPrice(productId)} 원</Text>
+      </View>
     </View>
   );
 };
@@ -146,121 +163,39 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 16,
   },
-  detail: {
+  orderInfo: {
+    marginBottom: 16,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  orderText: {
     fontSize: 16,
+    marginBottom: 8,
+  },
+  itemsTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 8,
+  },
+  itemContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 20,
+  },
+  itemName: {
+    fontSize: 16,
+    flex: 1,
+  },
+  itemPrice: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  line: {
+    borderBottomWidth: 1,
+    borderBottomColor: 'black',
+    width: '100%',
+    marginBottom: 20,
   },
 });
-
-const pa_styles=StyleSheet.create({
-    container:{
-        flex: 1,
-        backgroundColor: '#ffffff',
-    },
-    photo:{
-        width:"100%",
-        height:"50%",
-        backgroundColor: '#ffffff',
-        alignItems: 'center',
-    },
-    info:{
-        width:"100%",
-        height:"70%",
-        backgroundColor: '#ffffff',
-        flexDirection: 'column',
-        alignItems: 'center',
-    },
-});
-
-const ph_styles =StyleSheet.create({
-    photo:{
-      top:25,
-      width:"35%",
-      height:"75%",
-      backgroundColor: '#ffffff',
-      justifyContent: 'center',
-      alignItems: 'center',
-      resizeMode:'contain'
-    },
-    icon:{
-        position: 'absolute',
-        left: 220,
-        top: 130,
-    }
-  });
-
-  const in_styles=StyleSheet.create({
-    button: {
-      width:"100%",
-      height:"13%",
-      flexDirection: 'row',
-      alignItems: "center",
-      backgroundColor: "#ffffff",
-      //padding: 15,
-    },
-    block_l:{
-        flex:1,
-        backgroundColor: '#ffffff',
-    },
-    block_m:{
-        backgroundColor: '#ffffff',
-    },
-      block_r:{
-        backgroundColor: '#ffffff',
-    },
-    text_l:{
-        fontSize: 25,
-        color: '#000000',
-        alignItems: 'center',
-        fontWeight: "bold",
-    },
-    text_m:{
-        fontSize: 19,
-        color: '#A6A6A6',
-    },
-      text_r:{
-        fontSize: 20,
-        color: '#A6A6A6',
-        fontWeight: "bold",
-    },
-  });
-
-  const m_style=StyleSheet.create({
-    select:{
-      backgroundColor:"#ffffff",
-      height:"8%",
-      borderRadius:10,
-      justifyContent: "center",
-      alignItems: "center",
-    },
-    none_n:{
-      height:2,
-      backgroundColor:"#e5e5e5",
-    },
-    none_f:{
-      height:5,
-      backgroundColor:"#e5e5e5",
-    },
-    text:{
-      color:"#000000",
-      fontSize: 18,
-    },
-    cancel:{
-      color:"#FF1B1B",
-      fontWeight:"bold",
-      fontSize: 18,
-    },
-    flat:{
-      backgroundColor:"#ffffff",
-      height:50,
-      borderRadius:10,
-      justifyContent: "center",
-      alignItems: "center",
-      borderBottomWidth:2,
-      borderColor:"#E5E5E5",
-    },
-    list: {
-      height: '80%',
-    }
-  });
 
 export default Product_infoContainer;
