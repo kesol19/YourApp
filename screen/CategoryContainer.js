@@ -1,22 +1,12 @@
-import React from 'react';
+import React, { useEffect, useState} from 'react';
 import { Container, View, Text ,Button, TouchableOpacity, Image, StyleSheet, FlatList, StatusBar } from 'react-native';
 import {List,ListItem,SearchBar} from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
 
-const Cate = [
-    {
-      id: "1",
-      name:"생활용품",
-      src:"https://ifh.cc/g/QW45mB.png",
-    },
-    {
-      id: "2",
-      name: "주방용품",
-      src:"https://ifh.cc/g/xisNGP.png",
-    },
-  ];
+const CategoryContainer = ({ route, navigation }) => {
+  const [categorys, setCategorys] = useState([]);
 
-export default function CategoryContainer({navigation}){
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
@@ -32,122 +22,90 @@ export default function CategoryContainer({navigation}){
     });
   });
 
-    return(
-        <View style={styles.container}>
-            <TouchableOpacity activeOpacity={0.8} style={styles.block}
-            onPress={() => navigation.navigate('category_navi', {screen: 'category_one'})}>
+  useEffect(() => {
+    const fetchCategorys = async () => {
+      try {
+          const response = await axios.get('http://54.180.134.13:8082/category/all');
+        setCategorys(response.data);
+        console.log(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
 
-                <Text style={{fontSize:22, padding:23, fontWeight:'bold'}}>생활용품</Text>
+    fetchCategorys();
+  }, []);
 
-            </TouchableOpacity>
-            <TouchableOpacity activeOpacity={0.8} style={styles.block}
-            onPress={() => navigation.navigate('category_navi', {screen: 'category_two'})}>
+  const handleCategorySelection = (category) => {
+    navigation.navigate('category_navi', {screen: 'category_one', params: {category}});
+  };
 
-                <Text style={{fontSize:22, padding:23, fontWeight:'bold'}}>주방용품</Text>
-
-            </TouchableOpacity>
-        </View>
+  const renderCategory = ({ item }) => {
+    return (
+      <TouchableOpacity
+      style={styles.itemContainer}
+      onPress={() => handleCategorySelection(item.id)}
+      >
+        <Text style={styles.itemName}>{item.name}</Text>
+        <View style={styles.line} />
+      </TouchableOpacity>
     );
+  };
+
+  return (
+    <View style={styles.container}>
+      <FlatList
+        data={categorys}
+        renderItem={renderCategory}
+        keyExtractor={(item) => item.id.toString()}
+      />
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
     container:{
-        flexGrow: 0.25,
+        flexGrow: 1,
         alignItems: 'center',
         justifyContent: 'center',
         paddingVertical: 20,
     },
     block:{
         flex:1,
-        //flexDirection: 'row',
-        //alignItems: "center",
         backgroundColor:'#FFFFFF',
-        //justifyContent: 'center',
-        //padding:10,
         width: 400,
         height: 100,
         borderBottomWidth:1,
         borderColor:"#A6A6A6",
     },
     block_r:{
-        //width:"100%",
-        //height:"100%",
         backgroundColor:"#FFFFFF",
     },
     block_l:{
         flex:1,
         backgroundColor:"#FFFFFF",
     },
-});
-
-/*
-const CategoryContainer = ({ navigation }) => {
-  const [products, setProducts] = useState([]);
-
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await axios.get('http://54.180.134.13:8080/api/products');
-        setProducts(response.data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchProducts();
-  }, []);
-
-  const handleProductSelection = (productId, category) => {
-    // 상품 상세 정보 화면으로 이동하면서 데이터 전달
-    if (category === 1) {
-      navigation.navigate('Category_one', { productId, category });
-    } else if (category === 2) {
-      navigation.navigate('Category_two', { productId, category });
-    }
-  };
-
-  const renderProduct = ({ item }) => (
-    <TouchableOpacity
-      style={styles.productContainer}
-      onPress={() => handleProductSelection(item.id, item.category)}
-    >
-      <Text style={styles.productName}>{item.name}</Text>
-      <Text style={styles.productPrice}>{item.price}</Text>
-    </TouchableOpacity>
-  );
-
-  return (
-    <View style={styles.container}>
-      <FlatList
-        data={products}
-        renderItem={renderProduct}
-        keyExtractor={(item) => item.id.toString()}
-      />
-    </View>
-  );
-};
-
-const styles = StyleSheet.create({
-  container: {
+  itemContainer: {
     flex: 1,
+    margin: 8,
     padding: 16,
-    backgroundColor: '#fff',
-  },
-  productContainer: {
-    marginBottom: 16,
-    padding: 8,
     backgroundColor: '#f2f2f2',
-    borderRadius: 4,
+    borderRadius: 8,
+    width: 350,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  productName: {
-    fontSize: 18,
+  itemName: {
+    fontSize: 28,
     fontWeight: 'bold',
+    marginTop: 6,
+    marginBottom: 6,
   },
-  productPrice: {
-    fontSize: 16,
-    marginTop: 4,
+  line: {
+    borderBottomWidth: 1,
+    borderBottomColor: 'black',
+    width: '100%',
+    marginBottom: 20,
   },
 });
-
 export default CategoryContainer;
-*/

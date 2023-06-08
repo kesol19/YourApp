@@ -75,15 +75,6 @@ const home_styles = StyleSheet.create({
   text: {
     fontSize: 50,
   },
-  /*
-  product_box: {
-    borderRadius: 40,
-    width: '80%',
-    height: '90%',
-    backgroundColor: '#fff',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },*/
   product_box: {
     width: 400,
     height: 200,

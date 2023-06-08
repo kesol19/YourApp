@@ -46,7 +46,7 @@ function LogoTitle(){
   return(
     <TouchableOpacity onPress={() => navigation.navigate('home')}>
      <Image 
-      style={{ width: 100, height: 25 }}
+      style={{ width: 100, height: 25 }}//marginLeft값 조절하여 로고 위치 이동가능!!
       source={require('./asset/logoTitle.png')}/>
     </TouchableOpacity>
   );
@@ -97,7 +97,7 @@ function Category_navi({navigation}){
   return(
     <Stack.Navigator>
       <Stack.Screen name="category_one" component={Category_one} options={{
-          title: '생활용품',
+          title: '',
           headerRight: () => (
             <TouchableOpacity activeOpacity={0.4} onPress={() => navigation.navigate('cart')}>
               <Image

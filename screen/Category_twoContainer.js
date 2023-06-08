@@ -1,7 +1,81 @@
 import React, {useState, useEffect } from 'react';
 import { ScrollView, View, Text, Button, TouchableOpacity, StyleSheet, Image, Dimensions, FlatList,StatusBar } from 'react-native';
 import { NavigationContainer } from "@react-navigation/native";
+import axios from 'axios';
 
+const Category_twoContainer = ({ route }) => {
+  const [products, setProducts] = useState([]);
+  //const { productId, category, productName, productPrice, productImage, productSpec } = route.params;
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        //const response = await axios.get('http://54.180.134.13:8080/item/1234');
+          const response = await axios.get('http://54.180.134.13:8082/item/all', {
+      });
+        setProducts(response.data);
+        console.log(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+
+  const handleProductSelection = (productId, category, productName, productPrice, productImage, productSpec) => {
+    // 상품 상세 정보 화면으로 이동하면서 데이터 전달
+    navigation.navigate('category_detail', { productId, category, productName, productPrice, productImage, productSpec });
+
+  };
+
+  const renderProduct = ({ item }) => (
+   //if (category === 2) {
+       <TouchableOpacity
+         style={styles.productContainer}
+         onPress={() => handleProductSelection(item.id, item.category, item.name, item.price, item.image, item.spec)}
+       >
+         <Text style={styles.productName}>{item.name}</Text>
+         <Text style={styles.productPrice}>{item.price}</Text>
+       </TouchableOpacity>
+   //}
+  );
+
+  return (
+    <View style={styles.container}>
+      <FlatList
+        data={products}
+        renderItem={renderProduct}
+        keyExtractor={(item) => item.id.toString()}
+      />
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 16,
+    backgroundColor: '#fff',
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 16,
+  },
+  category: {
+    fontSize: 18,
+    marginBottom: 8,
+  },
+  detail: {
+    fontSize: 16,
+  },
+});
+
+export default Category_twoContainer;
+
+/*
 const Category_twoContainer = ({navigation}) => {
   const products = [
     {
@@ -113,6 +187,8 @@ const styles = StyleSheet.create({
 });
 
 export default Category_twoContainer;
+*/
+
 /*
 export default function Category_twoContainer(){
     return(
