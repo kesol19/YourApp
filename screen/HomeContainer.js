@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect } from 'react';
 import {
   StyleSheet,
   View,
@@ -9,9 +9,9 @@ import {
   Image,
 } from 'react-native';
 import {color} from 'react-native-elements/dist/helpers';
-import {useState} from 'react';
 import ProgressCircle from 'react-native-progress-circle';
 import Carousel from 'react-native-snap-carousel';
+import axios from 'axios';
 
 var month=new Date().getMonth();
 var year=new Date().getFullYear();
@@ -21,6 +21,8 @@ let screenHeight=Dimensions.get('window').height;
 const {width: SCREEN_WIDTH} = Dimensions.get('window');
 
 export default function HomeContainer({navigation}) {
+  const [products, setProducts] = useState([]);
+
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
@@ -36,6 +38,28 @@ export default function HomeContainer({navigation}) {
     });
   });
 
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+          const response = await axios.get('http://54.180.134.13:8082/item/all');
+        setProducts(response.data);
+        //console.log(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  const renderCarouselItem = ({ item }) => {
+    return (
+      <View style={home_styles.carouselItem}>
+        <Image source={{uri: item.image}} style={{width:"100%",height:"100%",borderRadius:10}}/>
+      </View>
+    );
+  };
+
 //캐로셀 추가 가능
   return (
      <View style={home_styles.container}>
@@ -45,13 +69,31 @@ export default function HomeContainer({navigation}) {
          vertical={true}>
 
          <ScrollView style={home_styles.product_box} horizontal={true}>
-          <Text style={home_styles.header_one}>{year}년 {month+1}월 추천 상품</Text>
+           <Text style={home_styles.header_one}>{year}년 {month+1}월 추천 상품</Text>
+           <Carousel
+             data={products}
+             renderItem={renderCarouselItem}
+             sliderWidth={800}
+             itemWidth={200}
+           />
          </ScrollView>
          <ScrollView style={home_styles.product_box} horizontal={true}>
-          <Text style={home_styles.header_one}>오늘의 이벤트</Text>
+           <Text style={home_styles.header_one}>오늘의 이벤트</Text>
+           <Carousel
+             data={products}
+             renderItem={renderCarouselItem}
+             sliderWidth={800}
+             itemWidth={200}
+           />
          </ScrollView>
          <ScrollView style={home_styles.product_box} horizontal={true}>
-          <Text style={home_styles.header_one}>#주방용품</Text>
+           <Text style={home_styles.header_one}>#주방용품</Text>
+           <Carousel
+             data={products}
+             renderItem={renderCarouselItem}
+             sliderWidth={800}
+             itemWidth={200}
+           />
          </ScrollView>
        </ScrollView>
      </View>
@@ -61,7 +103,7 @@ const home_styles = StyleSheet.create({
   container: {
     flexGrow: 1,
     alignItems: 'center',
-    justifyContent: 'center',
+    //justifyContent: 'center',
     paddingVertical: 20,
   },
   scrollView: {
@@ -88,5 +130,16 @@ const home_styles = StyleSheet.create({
     marginTop: 10,
     textAlign: 'center',
     color: '#00BFFF',
+  },
+  carouselItem: {
+    width: 200,
+    height: 200,
+    backgroundColor: 'gray',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  carouselItemText: {
+    color: 'white',
+    fontSize: 20,
   },
 });
